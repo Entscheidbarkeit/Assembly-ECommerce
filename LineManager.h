@@ -8,10 +8,11 @@
 #include"Workstation.h"
 
 namespace sdds {
+	// the line manager manages all the stations on the assembly line
 	class LineManager {
-		std::vector<Workstation*> m_activeLine;
-		size_t m_cntCustomerOrder = 0;
-		Workstation* m_firstStation;
+		std::vector<Workstation*> m_activeLine; // the actual assembly line with stations
+		size_t m_cntCustomerOrder = 0;  // the recieved customer orders
+		Workstation* m_firstStation;  // the pointer for the first station
 	public:
 		LineManager(const std::string& file, const std::vector<Workstation*>& stations);
 		void reorderStations();

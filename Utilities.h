@@ -4,8 +4,8 @@
 
 namespace sdds {
 	class Utilities {
-		static size_t m_widthField;
-		static char m_delimiter;
+		static size_t m_widthField; // the minimal space for string
+		static char m_delimiter; // the delimiter in the txt file
 	public:
 		void setFieldWidth(size_t newWidth);
 		size_t getFieldWidth() const;

@@ -7,7 +7,8 @@
 
 namespace sdds{
 	size_t Station::m_widthField = 0;
-	size_t Station::id_generator = 0;
+	size_t Station::id_generator = 0; // initialize the id-generator as 0
+	// in the constructor, the informations are extracted to each atttributes.
 	Station:: Station(const std::string& str) {
 		bool more = true;
 		size_t next_pos = 0;
@@ -20,6 +21,7 @@ namespace sdds{
 		id_generator++;
 		this->s_id = id_generator;
 	}
+	// some getters 
 	const std::string& Station::getItemName() const {
 		return i_name;
 	}
@@ -30,11 +32,14 @@ namespace sdds{
 	size_t Station::getQuantity() const {
 		return this->curr_items;
 	}
+	// after the item from order is filled, minus the quantity by 1
 	void Station:: updateQuantity() {
 		if (this->curr_items > 0) {
 			curr_items--;
 		}
 	}
+
+	// the display of status for stations
 	void Station:: display(std::ostream& os, bool full) const {
 		if (full == false) {
 			os << std::setw(3) << std::right << std::setfill('0') << this->s_id << " | ";

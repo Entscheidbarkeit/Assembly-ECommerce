@@ -36,7 +36,7 @@ namespace sdds {
 		}
 		m_widthField = (m_widthField < tool.getFieldWidth()) ? tool.getFieldWidth() : m_widthField;
 	}
-	
+	// move constructor
 	CustomerOrder:: CustomerOrder(CustomerOrder&& R) noexcept {
 		m_lstItem = nullptr;
 		this->m_name = R.m_name;
@@ -46,6 +46,7 @@ namespace sdds {
 		R.m_lstItem = nullptr;
 		R.m_cntItem = 0;
 	}
+	// the operator overload for move constructor
 	CustomerOrder& CustomerOrder:: operator=(CustomerOrder&& R) noexcept {
 		if (this != &R) {
 			if (m_lstItem != nullptr) {
@@ -63,15 +64,17 @@ namespace sdds {
 		}
 		return *this;
 	}
+	// destructor
 	CustomerOrder::~CustomerOrder() {
 		for (size_t i = 0; i < m_cntItem; i++) {
 			delete m_lstItem[i];
 		}
 		delete[] m_lstItem;
 	}
+	
 	bool CustomerOrder::isOrderFilled() const {
 		bool allFilled = true;
-		for (size_t i = 0; i < m_cntItem; i++) {
+		for (size_t i = 0; i < m_cntItem; i++) {// only when all items are filled, is the order filled
 			if (m_lstItem[i]->m_isFilled == false)
 				allFilled = false;
 		}
@@ -79,7 +82,7 @@ namespace sdds {
 	}
 	bool CustomerOrder::isItemFilled(const std::string& itemName) const {
 		bool isFilled = false;
-		int exist = 0;
+		int exist = 0;  // if the specified item do not exist, always return true
 		bool rtr = true;
 		for (size_t i = 0; i < m_cntItem; i++) {
 			if (itemName == m_lstItem[i]->m_itemName)
@@ -88,11 +91,13 @@ namespace sdds {
 				isFilled = true;
 		}
 		if (exist != 0)
-			rtr= isFilled;
+			rtr= isFilled; // if the searched item exists, return isFilled
 		if (exist == 0)
 			rtr= true;
 		return rtr;
 	}
+	// search for the first unfilled item and fill it(when the order is processed by a certain station)
+	// this is a simple simulation that each station only has one availble product.
 	bool CustomerOrder::fillItem(Station& station, std::ostream& os) {
 		bool containAndUnfilled = false;
 		bool rtr = true;
@@ -100,26 +105,30 @@ namespace sdds {
 		size_t i;
 		size_t mark;
 		for (i = 0; i < m_cntItem; i++) {
-			if (station.getItemName() == m_lstItem[i]->m_itemName && m_lstItem[i]->m_isFilled == false) {
+			// if the item that is produced by the station is found, then store the postion of the item in the order
+			if (station.getItemName() == m_lstItem[i]->m_itemName && m_lstItem[i]->m_isFilled == false) { 
 				containAndUnfilled = true;
-				mark = i;
+				mark = i; 
 				break;
 			}
 		}
+		// this iteration counts the items that are not filled
 		for (i = 0; i < m_cntItem; i++) {
 			if (station.getItemName() == m_lstItem[i]->m_itemName && m_lstItem[i]->m_isFilled == false) {
 				cnt++;
 			}
 		}
+		// starts to fill the item
 		if (containAndUnfilled == true) {
-			if (station.getQuantity() > 0) {
-				m_lstItem[mark]->m_serialNumber = station.getNextSerialNumber();
-				m_lstItem[mark]->m_isFilled = true;
+			if (station.getQuantity() > 0) { // if there are any capacity to fill the item
+				m_lstItem[mark]->m_serialNumber = station.getNextSerialNumber(); // set new serial number
+				m_lstItem[mark]->m_isFilled = true; // fill the item
 				station.updateQuantity();
+				// print information
 				os << "    Filled " << this->m_name << ", " << this->m_product << " [" << m_lstItem[mark]->m_itemName << "]\n";
 				rtr= true;
 			}
-			else {
+			else {// if there are no current available products in the station, for every item to be filled, print the message
 				for(int i = 0; i<cnt; i++)
 				os << "    Unable to fill " << this->m_name << ", " << this->m_product << " [" << m_lstItem[mark]->m_itemName << "]\n";
 				rtr= false;
@@ -127,6 +136,7 @@ namespace sdds {
 		}
 		return rtr;
 	}
+	// print the order with the filling information
 	void CustomerOrder::display(std::ostream& os) const {
 		os << m_name<<" - "<<m_product<<std::endl;
 		size_t i = 0;
@@ -140,6 +150,7 @@ namespace sdds {
 			}
 		}
 	}
+	// search method for a specified item
 	bool CustomerOrder::hasItem(const std::string item) {
 		size_t i;
 		bool containAndUnfilled = false;

@@ -5,14 +5,16 @@
 #include"Utilities.h"
 
 namespace sdds {
-	char Utilities::m_delimiter = '0';
-	size_t Utilities::m_widthField = 0;
+	char Utilities::m_delimiter = '0'; 
+	size_t Utilities::m_widthField = 0; 
 	void Utilities::setFieldWidth(size_t newWidth) {
 		m_widthField = newWidth;
 	}
 	size_t Utilities::getFieldWidth() const {
 		return m_widthField;
 	}
+	// extract informations from parameter. the next_pos is the beginning of extraction, and more indicates 
+	// if there are any more informations to be extracted
 	std::string Utilities::extractToken(const std::string& str, size_t& next_pos, bool& more) {
 		if (str[next_pos] == m_delimiter) {
 			more = false;
