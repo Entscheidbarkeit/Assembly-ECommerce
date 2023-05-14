@@ -2,6 +2,10 @@
 A small simulation of the assembly line for a Furniture Factory
 
 the draft for the functionality see below
+
+
+
+
 ![assemblyline](https://github.com/Entscheidbarkeit/Assembly-ECommerce/assets/119282401/c6d46977-1606-4ee5-bfa8-98ca04ee24b7)
 
 
